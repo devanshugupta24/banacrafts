@@ -13,7 +13,7 @@ const PaymentStatusBadge = ({ status }: PaymentStatusBadgeProps) => {
     refunded: { label: "Refunded", className: "bg-gray-100 text-gray-800 border-gray-200" },
   };
 
-  const config = statusConfig[status];
+  const config = statusConfig[status] ?? statusConfig.pending; // 🔑 fallback
 
   return (
     <Badge variant="outline" className={cn("font-medium", config.className)}>
@@ -21,5 +21,4 @@ const PaymentStatusBadge = ({ status }: PaymentStatusBadgeProps) => {
     </Badge>
   );
 };
-
 export default PaymentStatusBadge;
