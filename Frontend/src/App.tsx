@@ -90,7 +90,15 @@ const App = () => (
               <Route path="/customer/wishlist" element={<Wishlist />} />
               <Route path="/customer/checkout" element={<ProtectedRoute allowedRoles={["customer", "seller", "admin"]}><Checkout /></ProtectedRoute>} />
               <Route path="/customer/orders" element={<ProtectedRoute allowedRoles={["customer", "seller", "admin"]}><CustomerOrders /></ProtectedRoute>} />
-              <Route path="/order/success" element={<OrderSuccess />} />
+              <Route
+  path="/order/success/:id"
+  element={
+    <ProtectedRoute allowedRoles={["customer"]}>
+      <OrderSuccess />
+    </ProtectedRoute>
+  }
+/>
+
 
               {/* Seller Routes */}
               <Route path="/seller/dashboard" element={<ProtectedRoute allowedRoles={["seller"]}><SellerDashboard /></ProtectedRoute>} />
