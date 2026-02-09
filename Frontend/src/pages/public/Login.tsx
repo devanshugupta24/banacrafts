@@ -20,7 +20,13 @@ const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const from = (location.state as { from?: { pathname: string } })?.from?.pathname || "/";
+  const fromState = location.state as { from?: { pathname: string } } | null;
+
+const redirectPath =
+  fromState?.from?.pathname &&
+  !fromState.from.pathname.startsWith("/customer/orders")
+    ? fromState.from.pathname
+    : "/customer/dashboard";
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,19 +43,20 @@ const Login = () => {
     }
 
     // Redirect based on role
-    switch (role) {
-      case "admin":
-        navigate("/admin/dashboard");
-        break;
-      case "seller":
-        navigate("/seller/dashboard");
-        break;
-      case "customer":
-        navigate(from === "/login" ? "/customer/dashboard" : from);
-        break;
-      default:
-        navigate("/");
-    }
+   switch (role) {
+  case "admin":
+    navigate("/admin/dashboard", { replace: true });
+    break;
+  case "seller":
+    navigate("/seller/dashboard", { replace: true });
+    break;
+  case "customer":
+    navigate(redirectPath, { replace: true });
+    break;
+  default:
+    navigate("/", { replace: true });
+}
+
 
     } catch (err) {
       setError("Login failed. Please try again.");
