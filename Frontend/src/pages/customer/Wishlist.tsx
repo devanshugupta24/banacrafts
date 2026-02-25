@@ -36,7 +36,9 @@ const Wishlist = () => {
             {wishlist.map((product) => (
               <div key={product.id} className="heritage-card">
                 <div className="aspect-square overflow-hidden">
-                  <Link to={`/products/${product.id}`}><img src={product.image} alt={product.name} className="h-full w-full object-cover hover:scale-105 transition-transform" /></Link>
+                  <Link to={`/products/${product.id}`}><img
+  src={product.images?.[0]?.url || "/placeholder.png"}
+  alt={product.name} className="h-full w-full object-cover hover:scale-105 transition-transform" /></Link>
                 </div>
                 <div className="p-4">
                   <Link to={`/products/${product.id}`}><h3 className="font-heading font-semibold line-clamp-1 hover:text-primary">{product.name}</h3></Link>
