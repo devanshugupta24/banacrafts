@@ -49,7 +49,7 @@ const handleSubmit = async (e: React.FormEvent) => {
         navigate("/seller/dashboard");
         break;
       case "customer":
-        navigate("/customer/dashboard");
+        navigate("/");
         break;
       default:
         navigate("/");

@@ -51,7 +51,7 @@ const redirectPath =
     navigate("/seller/dashboard", { replace: true });
     break;
   case "customer":
-    navigate(redirectPath, { replace: true });
+    navigate("/", { replace: true });
     break;
   default:
     navigate("/", { replace: true });
