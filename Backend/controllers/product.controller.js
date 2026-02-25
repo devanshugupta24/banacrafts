@@ -68,7 +68,17 @@ export const createProduct = async (req, res) => {
 */
 export const getAllProducts = async (req, res) => {
   try {
-    const products = await Product.find()
+    const { search } = req.query;
+
+    let filter = {};
+
+    if (search) {
+      filter = {
+        name: { $regex: search, $options: "i" } // case-insensitive search
+      };
+    }
+
+    const products = await Product.find(filter)
       .populate("seller", "name email")
       .sort({ createdAt: -1 });
 

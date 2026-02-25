@@ -6,13 +6,15 @@ import { useAuth } from "@/context/AuthContext";
 import { useCart } from "@/context/CartContext";
 import logo from "@/assets/logo.png";
 import { useState } from "react";
-
+import { useNavigate } from "react-router-dom";
+;
 const Navbar = () => {
   const { user, isAuthenticated, logout } = useAuth();
   const { totalItems, wishlist } = useCart();
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
+const [search, setSearch] = useState("");
+const navigate = useNavigate();
   const navLinks = [
     { name: "Home", path: "/" },
     { name: "Products", path: "/products" },
@@ -62,9 +64,32 @@ const Navbar = () => {
 
         {/* Actions */}
         <div className="flex items-center gap-2 md:gap-4">
-          <Button variant="ghost" size="icon" className="hidden md:flex">
-            <Search className="h-5 w-5" />
-          </Button>
+          <form
+  onSubmit={(e) => {
+    e.preventDefault();
+    if (search.trim()) {
+      navigate(`/products?search=${search}`);
+     
+    }
+  }}
+  className="hidden md:flex items-center border rounded-full px-3 py-1"
+>
+  <Search className="h-4 w-4 text-muted-foreground mr-2" />
+  <input
+    type="text"
+    value={search}
+    onChange={(e) => {
+  const value = e.target.value;
+  setSearch(value);
+
+  if (value.trim() === "") {
+    navigate("/products");
+  }
+}}
+    placeholder="Search..."
+    className="outline-none text-sm bg-transparent w-32"
+  />
+</form>
 
           <Link to="/customer/wishlist">
             <Button variant="ghost" size="icon" className="relative">
