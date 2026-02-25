@@ -7,17 +7,26 @@ interface ProtectedRouteProps {
   allowedRoles: UserRole[];
 }
 
-const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, allowedRoles }) => {
-  const { user, isAuthenticated } = useAuth();
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
+  children,
+  allowedRoles,
+}) => {
+  const { user, isAuthenticated, loading } = useAuth();
   const location = useLocation();
 
+  // 🔥 Wait until auth restoration completes
+  if (loading) {
+    return <div>Loading...</div>; // You can replace with spinner
+  }
+
+  // 🔐 Not logged in
   if (!isAuthenticated || !user?.token) {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  if (!allowedRoles.includes(user?.role || null)) {
-    // Redirect to appropriate dashboard based on role
-    switch (user?.role) {
+  // 🚫 Role not allowed
+  if (!allowedRoles.includes(user.role)) {
+    switch (user.role) {
       case "admin":
         return <Navigate to="/admin/dashboard" replace />;
       case "seller":
