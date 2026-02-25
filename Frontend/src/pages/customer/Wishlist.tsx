@@ -8,7 +8,7 @@ import { useCart } from "@/context/CartContext";
 
 const Wishlist = () => {
   const { wishlist, removeFromWishlist, addToCart } = useCart();
-
+const getProductId = (product: any) => product._id || product.id;
   if (wishlist.length === 0) {
     return (
       <div className="min-h-screen flex flex-col">
@@ -45,7 +45,7 @@ const Wishlist = () => {
                   <p className="font-semibold text-primary mt-1">₹{product.price.toLocaleString()}</p>
                   <div className="flex gap-2 mt-4">
                     <Button variant="heritage" size="sm" className="flex-1 gap-1" onClick={() => addToCart(product)}><ShoppingCart className="h-4 w-4" />Add</Button>
-                    <Button variant="outline" size="sm" onClick={() => removeFromWishlist(product.id)}><Heart className="h-4 w-4 fill-primary text-primary" /></Button>
+                    <Button variant="outline" size="sm" onClick={() => removeFromWishlist(getProductId(product))}><Heart className="h-4 w-4 fill-primary text-primary" /></Button>
                   </div>
                 </div>
               </div>
