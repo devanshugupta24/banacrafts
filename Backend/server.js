@@ -25,7 +25,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/payments", paymentRoutes);
-
+app.use("/uploads", express.static("uploads"));
 
 /* Health check route */
 app.get("/", (req, res) => {

@@ -6,14 +6,30 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import ProductCard from "@/components/common/ProductCard";
 import ArtisanCard from "@/components/common/ArtisanCard";
-import { products } from "@/data/products";
+import { useEffect, useState } from "react";
+import { api } from "@/api/api";
 import { artisans } from "@/data/artisans";
 import heroBanner from "@/assets/hero-banner.jpg";
 
 const Index = () => {
-  const featuredProducts = products.slice(0, 4);
+  const [featuredProducts, setFeaturedProducts] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
   const featuredArtisans = artisans.slice(0, 3);
+  useEffect(() => {
+  const fetchProducts = async () => {
+    try {
+      const data = await api.get<any[]>("/products");
 
+      setFeaturedProducts(data.slice(0, 4));
+    } catch (error) {
+      console.error("Failed to fetch products");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchProducts();
+}, []);
   const features = [
     {
       icon: Leaf,
@@ -31,7 +47,13 @@ const Index = () => {
       description: "Supporting artisan communities",
     },
   ];
-
+if (loading) {
+  return (
+    <div className="container py-20 text-center">
+      Loading featured products...
+    </div>
+  );
+}
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
