@@ -17,16 +17,19 @@ interface ProductCardProps {
 
 const ProductCard: React.FC<ProductCardProps> = ({ product, className }) => {
   const { addToCart, addToWishlist, removeFromWishlist, isInWishlist } = useCart();
-  const inWishlist = isInWishlist(product.id);
+  const inWishlist = isInWishlist(getProductId(product));
 
   const handleWishlistClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    if (inWishlist) {
-      removeFromWishlist(product.id);
-    } else {
-      addToWishlist(product);
-    }
-  };
+  e.preventDefault();
+
+  const productId = getProductId(product);
+
+  if (inWishlist) {
+    removeFromWishlist(productId);
+  } else {
+    addToWishlist(product);
+  }
+};
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();

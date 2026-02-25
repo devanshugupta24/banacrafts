@@ -68,20 +68,46 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 };
 
 
-  const register = async (name: string, email: string, password: string, role: UserRole): Promise<boolean> => {
-    // Simulated registration
-    const mockUser: User = {
-      id: Math.random().toString(36).substr(2, 9),
-      name,
-      email,
-      role,
-      token:"mock-token"
-    };
-    setUser(mockUser);
-    localStorage.setItem("banacrafts_user", JSON.stringify(mockUser));
-    return true;
-  };
+const register = async (
+  name: string,
+  email: string,
+  password: string,
+  role: UserRole
+): Promise<boolean> => {
+  try {
+    const res = await fetch("http://localhost:5000/api/auth/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ name, email, password, role }),
+    });
 
+    if (!res.ok) {
+      const err = await res.json();
+      console.error(err);
+      return false;
+    }
+
+    const data = await res.json();
+
+    const newUser: User = {
+      id: data._id,
+      name: data.name,
+      email: data.email,
+      role: data.role,
+      token: data.token,
+    };
+
+    setUser(newUser);
+    localStorage.setItem("banacrafts_user", JSON.stringify(newUser));
+
+    return true;
+  } catch (error) {
+    console.error("Registration failed", error);
+    return false;
+  }
+};
   const logout = () => {
     setUser(null);
     localStorage.removeItem("banacrafts_user");
